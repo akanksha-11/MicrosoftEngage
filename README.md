@@ -32,6 +32,8 @@ Once pip has finished downloading the dependencies:
 (env)$ python manage.py runserver
 And navigate to http://127.0.0.1:8000/
 
+For uploading attendance, choose nay file in /media/documents folder
+
 
 
 Features Implemented
@@ -51,5 +53,19 @@ Features Implemented
    Greater number of points will override day wise points
 9. Allowing students to redeeem a coupon only if they have enough points
 10. Calculating attendance streak of all courses per student ( min(all course streaks))
+11. Implementing notifications for every time you earn points
+
+Assumptions/ Limitations
+1. File should be uploaded only once for a particular course
+2. Notification panel is not capped, will store all the notifications
+
+Future work
+1. Adding graphs by storing date wise attendance data as all sessions are mapped with dates as well but not used in this project as of now
+2. Using Likes and Polls data in the attendance file to calculate engagement and reward points on that basis
+3. Coupons can have validity feature as well
+
+
+
+
 
 
