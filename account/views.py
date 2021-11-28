@@ -8,6 +8,7 @@ import csv
 import pandas as pd
 import io
 from io import StringIO
+from django.db import transaction
 
 
 from account.models import Coupon, Course, Enrollment, Session, User
@@ -70,23 +71,13 @@ def student(request, student_id):
     e = Enrollment.objects.filter(user_id=student_id).values_list('course_streak')
     min = e.order_by('course_streak').first()
     streak = min[0]
-    percentage = 0
-    total_classes  = 0
-    for x in Course.objects.filter(user = student_id):
-             total_classes +=Session.objects.filter(course=x,uploaded =1).count()
-    if total_classes!=0:
-        percentage = (user.number_of_class_attended / total_classes)*100
-        percentage = round(float(percentage), 2)
-        user.attendance_percentage = percentage
-        user.save()
-
-   
+    user.save()
     
     context = {
         "students": leaderboard,
         "attendance_rank": rank,
         "streak":streak,
-        "attendance_percentage": percentage,
+        "attendance_percentage": user.attendance_percentage,
         "course_streak":e,
         "messages":user.messages
     }
@@ -110,6 +101,7 @@ def view_course(request, course_id):
     return render(request, 'course_teacher.html', context)
 
 
+
 def view_session(request,session_id):
     session = Session.objects.get(id=session_id)
     courseid = session.course.id
@@ -129,7 +121,7 @@ def view_session(request,session_id):
             if row['Duration']>=40 :
                 user.number_of_class_attended+=1
                 p = 0
-                e = Enrollment.objects.get(course_id =courseid,user_id= user.id).course_streak+1
+                e = Enrollment.objects.select_for_update().get(course_id =courseid,user_id= user.id).course_streak+1
                 if e==12 :
                     p=20
                 elif e==9:
@@ -142,20 +134,28 @@ def view_session(request,session_id):
                     p=1
                 user.points+=p
                 user.save()
-
                 notification = "You just earned "+str(p)+" point(s) for attending Lecture "+ str(session_id)+" of course "+str(session.course.course_name)+"."
                 print(notification)
-                # Enrollment.objects.get(course_id =courseid,user_id= user.id).course_streak+1
                 text = User.objects.get(id=user.id).messages
                 notification = text + notification
-                User.objects.filter(id=user.id).update(messages=notification)
-                
-                
+                user = User.objects.get(id=user.id)
+                print(user.messages,"kalu")
+                user.messages = notification
+                user.save()
+                Enrollment.objects.filter(course_id =courseid,user_id= user.id).update(course_streak = e)                     
                 
                 Enrollment.objects.filter(course_id =courseid,user_id= user.id).update(course_streak = e)             
-            
             else:
                 Enrollment.objects.filter(course_id =courseid,user_id= user.id).update(course_streak = 0) 
+            percentage = 0
+            total_classes  = 0
+            for x in Course.objects.filter(user = user.id):
+                    total_classes +=Session.objects.filter(course=x,uploaded =1).count()
+            if total_classes!=0:
+                percentage = (user.number_of_class_attended / total_classes)*100
+                percentage = round(float(percentage), 2)
+                user.attendance_percentage = percentage
+            user.save()
                 
     
     return render(request, 'session_teacher.html', {

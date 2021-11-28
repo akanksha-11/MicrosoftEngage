@@ -30,10 +30,6 @@ class Session(models.Model):
     objects = models.Manager()
 
 
-# class Notifications(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     # messages = ArrayField(ArrayField(models.CharField(max_length=255),size = 6))
-#     objects = models.Manager()
 
 class User(AbstractUser):
     user_type_data = ((1, "Student"), (2, "Teacher"))
