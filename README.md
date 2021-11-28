@@ -32,3 +32,24 @@ Once pip has finished downloading the dependencies:
 (env)$ python manage.py runserver
 And navigate to http://127.0.0.1:8000/
 
+
+
+Features Implemented
+1. Login by user type (teacher and student)
+2. View courses of student/teacher
+3. View all lectures of all courses for every teacher
+4. Uploading attendance file for every lecture
+5. Calculating attendance percentage for every student ( classes attended/ classes who's attendance has been uploaded)
+6. Calculating course streak( which goes zero everytime a student doesn't attend a class)
+7. Implemented a leaderboard of students based on attendance percentage
+8. Rewarding points:
+        1 point for attending a class
+        4 points for attending 3 classes (3 classes per week)
+        10 points for 2 weeks
+        15 points for 3 weeks
+        20 points for 1 month
+   Greater number of points will override day wise points
+9. Allowing students to redeeem a coupon only if they have enough points
+10. Calculating attendance streak of all courses per student ( min(all course streaks))
+
+
