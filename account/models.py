@@ -30,6 +30,11 @@ class Session(models.Model):
     objects = models.Manager()
 
 
+# class Notifications(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     # messages = ArrayField(ArrayField(models.CharField(max_length=255),size = 6))
+#     objects = models.Manager()
+
 class User(AbstractUser):
     user_type_data = ((1, "Student"), (2, "Teacher"))
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
@@ -38,6 +43,9 @@ class User(AbstractUser):
     attendance_percentage = models.PositiveIntegerField(default=0)
     number_of_class_attended = models.IntegerField(default = 0)
     streak = models.IntegerField(default = 0)
+    messages = models.TextField(default="Welcome")
+
+    
 
  
 class Enrollment(models.Model):

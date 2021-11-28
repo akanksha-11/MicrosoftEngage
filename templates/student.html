@@ -12,8 +12,8 @@
       
     
 
-  {% load static %} 
- 
+  {% load static %}
+  {% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -161,7 +161,7 @@
     <div class="container-fluid page-body-wrapper">
       <!-- partial:partials/_settings-panel.html -->
       <div class="theme-setting-wrapper">
-        <div id="settings-trigger"><i class="ti-settings"></i></div>
+        
         <div id="theme-settings" class="settings-panel">
           <i class="settings-close ti-close"></i>
           <p class="settings-heading">SIDEBAR SKINS</p>
@@ -273,7 +273,6 @@
             </div>
             <ul class="chat-list">
               <li class="list active">
-                <div class="profile"><img src="images/faces/face1.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Thomas Douglas</p>
                   <p>Available</p>
@@ -281,7 +280,6 @@
                 <small class="text-muted my-auto">19 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
                 <div class="info">
                   <div class="wrapper d-flex">
                     <p>Catherine</p>
@@ -292,7 +290,6 @@
                 <small class="text-muted my-auto">23 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face3.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Daniel Russell</p>
                   <p>Available</p>
@@ -300,7 +297,6 @@
                 <small class="text-muted my-auto">14 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
                 <div class="info">
                   <p>James Richardson</p>
                   <p>Away</p>
@@ -308,7 +304,6 @@
                 <small class="text-muted my-auto">2 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face5.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Madeline Kennedy</p>
                   <p>Available</p>
@@ -316,7 +311,6 @@
                 <small class="text-muted my-auto">5 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="images/faces/face6.jpg" alt="image"><span class="online"></span></div>
                 <div class="info">
                   <p>Sarah Graves</p>
                   <p>Available</p>
@@ -346,7 +340,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'student' user.id %}">
+            <a class="nav-link" href="{% url 'index'  %}">
               <i class="menu-icon mdi mdi-floor-plan"></i>
               <span class="menu-title">Logout</span>
               <i class="menu-arrow"></i>
@@ -412,11 +406,11 @@
                             <p class="statistics-title">Attendance Streak</p>
                             <h3 class="rate-percentage">{{streak}}</h3>
                           </div>
-                          <div>
+                          <!-- <div>
                             <p class="statistics-title">Engagement Ratio</p>
                             <h3 class="rate-percentage">0.78</h3>
                             <p class="text-success d-flex"><i class="mdi mdi-menu-up"></i><span>+0.1%</span></p>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div> 
@@ -427,40 +421,67 @@
                             <div class="card card-rounded">
                               
                                 <div class="card-body">
-                                  <div class="d-flex align-items-center justify-content-between mb-3">
-                                    <h4 class="card-title card-title-dash">Notifications</h4>
-                                  </div>
-                                  <ul class="bullet-line-list">
-                                    <li>
-                                      <div class="d-flex justify-content-between">
-                                        <div><span class="text-light-green">Ben Tossell</span> assign you a task</div>
-                                        <p>Just now</p>
-                                      </div>
-                                    </li>
-                                    <li>
-                                      <div class="d-flex justify-content-between">
-                                        <div><span class="text-light-green">Oliver Noah</span> assign you a task</div>
-                                        <p>1h</p>
-                                      </div>
-                                    </li>
-                                    <li>
-                                      <div class="d-flex justify-content-between">
-                                        <div><span class="text-light-green">Jack William</span> assign you a task</div>
-                                        <p>1h</p>
-                                      </div>
-                                    </li>
-                                  </ul>
-                                  <div class="list align-items-center pt-3">
-                                    <div class="wrapper w-100">
-                                      <p class="mb-0">
-                                        <a href="#" class="fw-bold text-primary">Show all <i class="mdi mdi-arrow-right ms-2"></i></a>
-                                      </p>
+                                  <div class="d-sm-flex justify-content-between align-items-start">
+                                    <div>
+                                      <h4 class="card-title card-title-dash">My Courses</h4>
                                     </div>
+                      
                                   </div>
+                                  <div class="table-responsive  mt-1">
+                                    <table class="table select-table">
+                                      <thead>
+                                        <tr>
+        
+                                          <th>Course Name</th>
+                                          <th>Course ID</th>
+                                          <th>Progress</th>
+                                          <th>Course Streak</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+  
+                                       {% for c in user.courses.all%}
+                                        <tr>
+                                    
+                                          <td>
+                                           
+                                              <h6 >{{ c.course_name }}</h6>
+                                         
+                                          
+                
+                                          </td>
+                                          <td>
+                                          <h6>{{ c.id }}</h6>
+            
+                                          </td>
+                                          <td>
+                                          <div>
+                                          <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
+                                          <p class="text-success">52%</p>
+                                          
+                                          <p>85/162</p>
+                                          </div>
+                                          <div class="progress progress-md">
+                                          <div class="progress-bar bg-success" role="progressbar" style="width: 85%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                          </div>
+                                          </div>
+                                          </td>
+                                          <td><div class="badge badge-opacity-warning"> {{ course_streak|index:forloop.counter0 }}</div></td>
+                                         
+                                          </tr>
+                                          {% endfor %} 
+  
+                                          <ul class="list-group">
+                                            
+                                        </ul>
+                                        
+                                       
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  
                                 </div>
-                                <div class="chartjs-wrapper mt-5">
-                                  <canvas id="performaneLine"></canvas>
-                                </div>
+                               
                              
                             </div>
                           </div>
@@ -547,79 +568,34 @@
                     <div class="row">
                       <div class="col-lg-8 d-flex flex-column">
                         <div class="row flex-grow">
-                          <div class="col-12 grid-margin stretch-card">
+                          <div class="col-12 grid-margin">
                             <div class="card card-rounded">
                               <div class="card-body">
-                                <div class="d-sm-flex justify-content-between align-items-start">
-                                  <div>
-                                    <h4 class="card-title card-title-dash">My Courses</h4>
-                                  </div>
-                    
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                  <h4 class="card-title card-title-dash">Notifications</h4>
                                 </div>
-                                <div class="table-responsive  mt-1">
-                                  <table class="table select-table">
-                                    <thead>
-                                      <tr>
-      
-                                        <th>Course Name</th>
-                                        <th>Course ID</th>
-                                        <th>Progress</th>
-                                        <th>Course Streak</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-
-                                     {% for c in user.courses.all%}
-                                      <tr>
-                                  
-                                        <td>
-                                         
-                                            <h6 >{{ c.course_name }}</h6>
-                                       
-                                        
-              
-                                        </td>
-                                        <td>
-                                        <h6>{{ c.id }}</h6>
-          
-                                        </td>
-                                        <td>
-                                        <div>
-                                        <div class="d-flex justify-content-between align-items-center mb-1 max-width-progress-wrap">
-                                        <p class="text-success">52%</p>
-                                        
-                                        <p>85/162</p>
-                                        </div>
-                                        <div class="progress progress-md">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 85%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                        </div>
-                                        </td>
-                                        
-                                        <td><div class="badge badge-opacity-warning">{{forloop.counter0 }}</div></td>
-                                       
-                                        </tr>
-                                        {% endfor %} 
-
-                                        <ul class="list-group">
-                                          
-                                      </ul>
-                                      
+                                <ul class="bullet-line-list">
+                                  {% with messages|split:"." as skills %}
+                                              {% for skill in skills %}
+                                  <li>
+                                    <div class="d-flex justify-content-between">
                                      
-                                    </tbody>
-                                  </table>
-                                </div>
-                                <!-- <div class="d-sm-flex justify-content-between align-items-start">
-                                  <div>
-                                   <h4 class="card-title card-title-dash">Attendance Chart</h4>
-                                   <h5 class="card-subtitle card-subtitle-dash">Your overall attendance this month</h5>
-                                  </div>
-                                  <div id="performance-line-legend"></div>
-                                </div>
-                                <div class="chartjs-wrapper mt-5">
-                                  <canvas id="performaneLine"></canvas>
-                                </div> -->
-                                       
+                                      
+                                      <div><span class="text-light-green">
+                                        
+                                                  {{ skill }}<br>
+                                           
+                                        </span></div>
+                                     
+                                    </div>
+                                  </li>
+
+                                  {% endfor %}
+                                  {% endwith %}
+                                 
+                                 
+                                </ul>
+                                
 
                               </div>
                             </div>
@@ -654,69 +630,8 @@
                       <div class="col-lg-4 d-flex flex-column">
                         <div class="row flex-grow">
                           <div class="col-12 grid-margin stretch-card">
-                            <div class="card card-rounded">
-                              <div class="card-body">
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                      <h4 class="card-title card-title-dash">Todo list</h4>
-                                      <div class="add-items d-flex mb-0">
-                                        <!-- <input type="text" class="form-control todo-list-input" placeholder="What do you need to do today?"> -->
-                                        <button class="add btn btn-icons btn-rounded btn-primary todo-list-add-btn text-white me-0 pl-12p"><i class="mdi mdi-plus"></i></button>
-                                      </div>
-                                    </div>
-                                    <div class="list-wrapper">
-                                      <ul class="todo-list todo-list-rounded">
-                                        <li class="d-block">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-warning me-3">Due tomorrow</div>
-                                              <i class="mdi mdi-flag ms-2 flag-color"></i>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="d-block">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">23 June 2020</div>
-                                              <div class="badge badge-opacity-success me-3">Done</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li>
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-success me-3">Done</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                        <li class="border-bottom-0">
-                                          <div class="form-check w-100">
-                                            <label class="form-check-label">
-                                              <input class="checkbox" type="checkbox"> Lorem Ipsum is simply dummy text of the printing <i class="input-helper rounded"></i>
-                                            </label>
-                                            <div class="d-flex mt-2">
-                                              <div class="ps-4 text-small me-3">24 June 2020</div>
-                                              <div class="badge badge-opacity-danger me-3">Expired</div>
-                                            </div>
-                                          </div>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                            
+
                             </div>
                           </div>
                         </div>
@@ -761,26 +676,6 @@
   </div>
   <!-- container-scroller -->
 
-  <!-- plugins:js -->
-  <script src="vendors/js/vendor.bundle.base.js"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="vendors/chart.js/Chart.min.js"></script>
-  <script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <script src="vendors/progressbar.js/progressbar.min.js"></script>
-
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/hoverable-collapse.js"></script>
-  <script src="js/template.js"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="js/dashboard.js"></script>
-  <script src="js/Chart.roundedBarCharts.js"></script>
-  <!-- End custom js for this page-->
 </body>
 
 </html>

@@ -17,6 +17,7 @@ from django.contrib.auth import authenticate, login
 # Create your views here.
 
 
+
 def index(request):
     return render(request, 'index.html')
 
@@ -58,11 +59,14 @@ def student(request, student_id):
     rank = 0
     user = User.objects.get(id=student_id)
     students = User.objects.filter(user_type="1").order_by('-attendance_percentage')
+    leaderboard = User.objects.filter(user_type="1")
+    leaderboard = leaderboard.order_by('-attendance_percentage')
     for x in students:
         if x.attendance_percentage > user.attendance_percentage:
             rank+=1
     
     rank+=1
+    
     e = Enrollment.objects.filter(user_id=student_id).values_list('course_streak')
     min = e.order_by('course_streak').first()
     streak = min[0]
@@ -72,19 +76,19 @@ def student(request, student_id):
              total_classes +=Session.objects.filter(course=x,uploaded =1).count()
     if total_classes!=0:
         percentage = (user.number_of_class_attended / total_classes)*100
+        percentage = round(float(percentage), 2)
         user.attendance_percentage = percentage
         user.save()
 
-    # rank = student_id
-    # rank = User.objects.filter(user_type="1",id = student_id).order_by('-attendance_percentage').count()
-    # rank = students.filter(id = student_id).count()
+   
     
     context = {
-        "students": students,
+        "students": leaderboard,
         "attendance_rank": rank,
         "streak":streak,
         "attendance_percentage": percentage,
-        "course_streak":e
+        "course_streak":e,
+        "messages":user.messages
     }
     return render(request,'student.html',context)
 
@@ -138,7 +142,15 @@ def view_session(request,session_id):
                     p=1
                 user.points+=p
                 user.save()
-                # notification = "You just earned"+p+"points for attending Lecture"+ session_id+"of Course"+session.course.course_name
+
+                notification = "You just earned "+str(p)+" point(s) for attending Lecture "+ str(session_id)+" of course "+str(session.course.course_name)+"."
+                print(notification)
+                # Enrollment.objects.get(course_id =courseid,user_id= user.id).course_streak+1
+                text = User.objects.get(id=user.id).messages
+                notification = text + notification
+                User.objects.filter(id=user.id).update(messages=notification)
+                
+                
                 
                 Enrollment.objects.filter(course_id =courseid,user_id= user.id).update(course_streak = e)             
             
@@ -148,7 +160,8 @@ def view_session(request,session_id):
     
     return render(request, 'session_teacher.html', {
         'form': form,
-        'session':session
+        'session':session,
+        
     })
     
 
