@@ -15,7 +15,7 @@ Database : MongoDB
 
 The first thing to do is to clone the repository:
 
-$ git clone https://github.com/
+$ git clone https://github.com/akanksha-11/MicrosoftEngage.git
 $ cd engage
 Create a virtual environment to install dependencies in and activate it:
 
