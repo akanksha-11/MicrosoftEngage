@@ -33,6 +33,8 @@ Once pip has finished downloading the dependencies:
 And navigate to http://127.0.0.1:8000/
 
 For uploading attendance, choose nay file in /media/documents folder
+Credentials:For students: Userid- student1 Password-engageone, student2, engagetwo and so on till student10
+For teachers: Userid teacher1 Password- engageone and so on till teacher5
 
 
 
